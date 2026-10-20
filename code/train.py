@@ -91,6 +91,18 @@ def main():
     joblib.dump(vec, "vec.pkl")
     print("Saved 'model.pkl' and 'vec.pkl' successfully.")
 
+    # Export model to JSON format for lightweight runtime inference
+    import json
+    data = {
+        "vocab": {k: int(v) for k, v in vec.vocabulary_.items()},
+        "idf": vec.idf_.tolist(),
+        "coef": model.coef_[0].tolist(),
+        "intercept": float(model.intercept_[0])
+    }
+    with open("model.json", "w") as f:
+        json.dump(data, f)
+    print("model.json saved successfully!")
+
     # Write evaluation metrics to a markdown report
     metrics_report = f"""# ML Model Training & Evaluation Report
 
